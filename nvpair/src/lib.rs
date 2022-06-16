@@ -424,7 +424,7 @@ impl NvEncode for [&ffi::CStr] {
             sys::nvlist_add_string_array(
                 nv.as_mut_ptr(),
                 name.as_ref().as_ptr(),
-                self.iter().map(|x| x.as_ptr()).collect::<Vec<*const i8>>()[..].as_ptr(),
+                self.iter().map(|x| x.as_ptr()).collect::<Vec<_>>()[..].as_ptr(),
                 self.len().try_into().unwrap(),
             )
         };
@@ -622,7 +622,7 @@ impl NvListRef {
         let size = self.encoded_size(code).unwrap() as usize;
         let mut vec = Vec::with_capacity(size);
         let mut cap = vec.capacity() as u64;
-        let mut ptr = vec.as_mut_ptr() as *mut i8;
+        let mut ptr = vec.as_mut_ptr() as *mut _;
 
         let v = unsafe {
             let v = nvpair_sys::nvlist_pack(
